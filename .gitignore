@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.Python
+
+# IDE/editor directories
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Python distribution and packaging
+build/
+dist/
+*.egg-info/
+
+# Test and coverage reports
+*.log
+*.pot
+*.mo
+.coverage
+.coverage.*
+nosetests.xml
+test_*.xml
+*.hypothesis/
+.cache/
+tox/
+*.env
+*.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Python egg and wheel caches
+.eggs/
+.eggs/*
+pip-log.txt
+pip-delete-this-directory.txt
+
+# macOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+Desktop.ini
+
