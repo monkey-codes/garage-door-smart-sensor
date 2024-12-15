@@ -7,7 +7,7 @@ from datetime import datetime
 from LCD1602 import CharLCD1602
 from collections import deque
 import paho.mqtt.client as mqtt
-
+import os
 lcd1602 = CharLCD1602()    
 
 trigPin = 23
@@ -18,8 +18,8 @@ broker = "homeassistant.local"
 port = 1883
 config_topic = "homeassistant/device/garagepi/config"
 state_topic = "homeassistant/device/garagepi/state"
-username = ""
-password = ""
+username = os.environ.get('MQTT_USER')
+password = os.environ.get('MQTT_PASSWORD')
 
 client = mqtt.Client()
 client.username_pw_set(username, password)
@@ -85,11 +85,14 @@ def publish():
     cpu_temp = '{:.2f}'.format( float(cpu)/1000 )
 
     data = f'{{ "distance": {(sensor.distance * 100):.2f}, "cpu_temp": {cpu_temp} }}'
-    #print(data)
     client.publish(state_topic, data)
 
-def loop2():
+def loop():
     lcd1602.init_lcd()
+    if not username:
+        print(f"MQTT username is not set!")
+    if not password:
+        print(f"MQTT password is not set!")
     display_queue = deque([get_cpu_temp, get_time_now, get_distance])
     while True:
         lcd1602.clear()
@@ -101,22 +104,11 @@ def loop2():
         display_queue.rotate(-1)
         publish()
         sleep(2)
-
-    
-
-def loop(): 
-    lcd1602.init_lcd()
-    while True:
-        lcd1602.clear()
-        #lcd1602.write(0, 0, 'd:' + str(sensor.distance * 100))
-        lcd1602.write(0, 0, f'Distance: {(sensor.distance * 100):.2f}')
-        print('Distance: ', sensor.distance * 100,'cm')
-        sleep(1)
-        
+       
 if __name__ == '__main__':     # Program entrance
     print ('Program is starting...')
     try:
-        loop2()
+        loop()
     except KeyboardInterrupt:  # Press ctrl-c to end the program.
         sensor.close()
         
